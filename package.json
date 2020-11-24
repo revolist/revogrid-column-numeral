@@ -6,13 +6,13 @@
   "scripts": {
     "build": "webpack --config webpack.config.js"
   },
+  "keywords": [],
+  "author": "revolist",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/revolist/revogrid-column-numeral.git"
   },
-  "keywords": [],
-  "author": "revolist",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/revolist/revogrid-column-numeral/issues"
   },
