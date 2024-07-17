@@ -1,4 +1,10 @@
-# revogrid-numeral.js
+### 🚨 Repository Notice 🚨
+
+This repo is read-only and will be **deprecated** in v5+ in favor of monorepos. Post issues [here](https://github.com/revolist/revogrid). Happy coding! 🖥️💻
+
+---
+
+# Number Column Type
 Number column type for RevoGrid system based on [numeraljs](http://numeraljs.com) library.
 
 Use any format you love to assign number format for your grid.
