@@ -1,10 +1,23 @@
 {
   "name": "@revolist/revogrid-column-numeral",
-  "version": "1.0.2",
+  "version": "2.0.2",
   "description": "Number column type for RevoGrid system based on numeraljs",
-  "main": "dist/index.js",
+  "main": "./dist/revo-column-number.umd.cjs",
+  "module": "./dist/revo-column-number.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/revo-column-number.mjs",
+      "require": "./dist/revo-column-number.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "release": "npm run build && npm publish --public --tag pre-release"
   },
   "keywords": [],
   "author": "revolist",
@@ -18,16 +31,14 @@
   },
   "homepage": "https://github.com/revolist/revogrid-column-numeral#readme",
   "devDependencies": {
-    "@revolist/revogrid": "^1.7.0",
-    "eslint": "^4.18.2",
-    "eslint-loader": "^1.6.1",
-    "ts-loader": "^8.0.6",
-    "typescript": "^4.0.3",
-    "webpack": "^5.1.3",
-    "webpack-cli": "^4.1.0"
+    "@types/numeral": "^2.0.5",
+    "@revolist/revogrid": "^4.8.1",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.3",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@types/numeral": "0.0.28",
     "numeral": "^2.0.6"
   }
 }

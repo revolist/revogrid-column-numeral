@@ -1,6 +1,5 @@
-import { RevoGrid } from '@revolist/revogrid/dist/types/interfaces';
-import { VNode } from '@revolist/revogrid/dist/types/stencil-public-runtime';
-import numeral from 'numeral';
+import { VNode, CellProps, ColumnDataSchemaModel, HyperFunc } from '@revolist/revogrid';
+import numeral, { Numeral } from 'numeral';
 
 const defaultFormat: string = '0,0[.]00';
 
@@ -13,11 +12,11 @@ export default class NumberColumnType {
             this.numberFormat = format;
         }
     }
-    columnProperties = (): RevoGrid.CellProps => ({ class: { ['align-center']: true }});
+    columnProperties = (): CellProps => ({ class: { ['align-center']: true }});
 
-    cellProperties = (): RevoGrid.CellProps => ({ class: { ['align-right']: true } });
+    cellProperties = (): CellProps => ({ class: { ['align-right']: true } });
 
-    cellTemplate = (_h: RevoGrid.HyperFunc<VNode>, p: RevoGrid.ColumnDataSchemaModel): string => {
+    cellTemplate = (_h: HyperFunc<VNode>, p: ColumnDataSchemaModel): string => {
         const parsed = parseFloat(p.model[p.prop]);
         if (isNaN(parsed)) {
             return '';
@@ -34,7 +33,7 @@ export default class NumberColumnType {
     }
     
     /** Get numeral instance in case you don't want to add any in your project */
-    static getNumeralInstance(): Numeral {
+    static getNumeralInstance() {
         return numeral;
     }
 }

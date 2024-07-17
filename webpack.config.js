@@ -1,7 +1,9 @@
 const path = require('path');
 
-let libraryName = 'index';
-module.exports = {
+const libraryName = 'revo-column-number';
+
+const common = {
+  mode: 'production',
   entry: {
     [libraryName]: './src/index.ts'
   },
@@ -12,9 +14,12 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
-  externals: {
-    numbro: 'numbro',
-  },
+  externals: [
+    'numbro',
+    'numeral',
+    '@revolist/revogrid',
+    /^@revolist\/revogrid\//,
+  ],
   resolve: {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
@@ -28,3 +33,25 @@ module.exports = {
     ],
   },
 };
+
+
+module.exports = [{
+  ...common,
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: '[name].umd.cjs',
+    library: libraryName,
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
+  },
+}, {
+  ...common,
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    filename: '[name].mjs',
+    libraryTarget: 'module',
+  },
+  experiments: {
+    outputModule: true // Enables experimental support for ESM output
+  },
+}];
