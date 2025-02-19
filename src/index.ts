@@ -1,39 +1,51 @@
-import { VNode, CellProps, ColumnDataSchemaModel, HyperFunc } from '@revolist/revogrid';
+import type {
+  VNode,
+  CellProps,
+  ColumnDataSchemaModel,
+  HyperFunc,
+  ColumnProperties,
+  ColumnRegular,
+} from '@revolist/revogrid';
 import numeral, { Numeral } from 'numeral';
 
-const defaultFormat: string = '0,0[.]00';
+const defaultFormat = '0,0[.]00';
 
-export default class NumberColumnType {
-    private readonly numberFormat: string;
-    constructor(format?: string, private emiter?: (event: string, instance: Numeral) => void) {
-        if (!format) {
-            this.numberFormat = defaultFormat;
-        } else {
-            this.numberFormat = format;
-        }
+export default class NumberColumnType implements ColumnProperties {
+  private numberFormat = defaultFormat;
+  constructor(
+    format?: string,
+    private emitter?: (event: string, instance: Numeral) => void,
+  ) {
+    if (format) {
+      this.numberFormat = format;
     }
-    columnProperties = (): CellProps => ({ class: { ['align-center']: true }});
+  }
+  columnProperties = (): CellProps => ({ class: { ['align-center']: true } });
 
-    cellProperties = (): CellProps => ({ class: { ['align-right']: true } });
+  cellProperties = (): CellProps => ({ class: { ['align-right']: true } });
 
-    cellTemplate = (_h: HyperFunc<VNode>, p: ColumnDataSchemaModel): string => {
-        const parsed = parseFloat(p.model[p.prop]);
-        if (isNaN(parsed)) {
-            return '';
-        }
-        return this.formated(parsed);
-    };
+  cellTemplate = (_: HyperFunc<VNode>, p: ColumnDataSchemaModel) => {
+    return this.cellParser(p.model, p.column);
+  };
 
-    formated(val: number): string {
-        const num = numeral(val);
-        if (this.emiter) {
-            this.emiter('beforeValueFormatted', num);
-        }
-        return num.format(this.numberFormat)
+  cellParser = (model: any, column: ColumnRegular): any => {
+    const parsed = parseFloat(model[column.prop]);
+    if (isNaN(parsed)) {
+      return '';
     }
-    
-    /** Get numeral instance in case you don't want to add any in your project */
-    static getNumeralInstance() {
-        return numeral;
+    return this.formatted(parsed);
+  };
+
+  formatted(val: number): string {
+    const num = numeral(val);
+    if (this.emitter) {
+      this.emitter('beforeValueFormatted', num);
     }
+    return num.format(this.numberFormat);
+  }
+
+  /** Get numeral instance in case you don't want to add any in your project */
+  static getNumeralInstance() {
+    return numeral;
+  }
 }
