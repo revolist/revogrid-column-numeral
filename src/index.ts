@@ -1,16 +1,27 @@
-import type {
-  VNode,
-  CellProps,
-  ColumnDataSchemaModel,
-  HyperFunc,
-  ColumnProperties,
-  ColumnRegular,
+import {
+  type VNode,
+  type CellProps,
+  type ColumnDataSchemaModel,
+  type HyperFunc,
+  type ColumnType,
+  type ColumnRegular,
+  TextEditor,
 } from '@revolist/revogrid';
 import numeral, { Numeral } from 'numeral';
 
 const defaultFormat = '0,0[.]00';
+/**
+ * Editor which returns value as number
+ */
+class EditCell extends TextEditor {
+  getValue(): any {
+    const value = this.editInput?.value;
+    const parsedValue = parseFloat(value);
+    return isNaN(parsedValue) ? value : parsedValue;
+  }
+}
 
-export default class NumberColumnType implements ColumnProperties {
+export default class NumberColumnType implements ColumnType {
   private numberFormat = defaultFormat;
   constructor(
     format?: string,
@@ -20,6 +31,7 @@ export default class NumberColumnType implements ColumnProperties {
       this.numberFormat = format;
     }
   }
+  editor = EditCell;
   columnProperties = (): CellProps => ({ class: { ['align-center']: true } });
 
   cellProperties = (): CellProps => ({ class: { ['align-right']: true } });
