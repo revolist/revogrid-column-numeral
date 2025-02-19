@@ -1,6 +1,6 @@
 {
   "name": "@revolist/revogrid-column-numeral",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Number column type for RevoGrid system based on numeraljs",
   "main": "./dist/revo-column-number.umd.cjs",
   "module": "./dist/revo-column-number.mjs",
