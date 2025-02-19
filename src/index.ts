@@ -37,10 +37,10 @@ export default class NumberColumnType implements ColumnType {
   cellProperties = (): CellProps => ({ class: { ['align-right']: true } });
 
   cellTemplate = (_: HyperFunc<VNode>, p: ColumnDataSchemaModel) => {
-    return this.cellParser(p.model, p.column);
+    return this.parse(p.model, p.column);
   };
 
-  cellParser = (model: any, column: ColumnRegular): any => {
+  parse = (model: any, column: ColumnRegular): any => {
     const parsed = parseFloat(model[column.prop]);
     if (isNaN(parsed)) {
       return '';
