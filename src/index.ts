@@ -21,7 +21,7 @@ class EditCell extends TextEditor {
   }
 }
 
-export default class NumberColumnType implements ColumnType {
+class NumberColumnType implements ColumnType {
   private numberFormat = defaultFormat;
   constructor(
     format?: string,
@@ -61,3 +61,5 @@ export default class NumberColumnType implements ColumnType {
     return numeral;
   }
 }
+
+export { NumberColumnType, NumberColumnType as default };
