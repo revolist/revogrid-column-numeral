@@ -15,21 +15,23 @@ const defaultFormat = '0,0[.]00';
  */
 class EditCell extends TextEditor {
   getValue(): any {
-    const value = this.editInput?.value;
-    const parsedValue = parseFloat(value);
-    return isNaN(parsedValue) ? value : parsedValue;
+    const value = this.editInput?.value ?? '';
+    if (!value.trim()) {
+      return value;
+    }
+    const numeric = numeral(value).value();
+    if (numeric === null || Number.isNaN(numeric)) {
+      return value;
+    }
+    return numeric;
   }
 }
 
-class NumberColumnType implements ColumnType {
-  private numberFormat = defaultFormat;
+export default class NumberColumnType implements ColumnType {
   constructor(
-    format?: string,
+    private readonly numberFormat = defaultFormat,
     private emitter?: (event: string, instance: Numeral) => void,
   ) {
-    if (format) {
-      this.numberFormat = format;
-    }
   }
   editor = EditCell;
   columnProperties = (): CellProps => ({ class: { ['align-center']: true } });
@@ -61,5 +63,3 @@ class NumberColumnType implements ColumnType {
     return numeral;
   }
 }
-
-export { NumberColumnType, NumberColumnType as default };
