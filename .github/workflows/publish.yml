@@ -9,10 +9,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     # Setup .npmrc file to publish to npm
-    - uses: actions/setup-node@v4
+    - name: Setup Node JS environment for npm
+      uses: actions/setup-node@v6
       with:
-        node-version: '22.x'
+        node-version: 24
         registry-url: 'https://registry.npmjs.org'
+    - name: Update npm
+      run: npm install -g npm@latest
+      shell: bash
+
     - run: npm ci
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
