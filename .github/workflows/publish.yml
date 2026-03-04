@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     # Setup .npmrc file to publish to npm
     - name: Setup Node JS environment for npm
       uses: actions/setup-node@v6
@@ -18,7 +18,7 @@ jobs:
     # Build
     - run: npm run build
     # Publish to npm
-    - run: npm publish --provenance --access public
+    - run: npm publish --access public
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     # Setup .npmrc file to publish to GitHub Packages
