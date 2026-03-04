@@ -19,8 +19,6 @@ jobs:
       shell: bash
 
     - run: npm ci
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     # Build
     - run: npm run build
     # Publish to npm
