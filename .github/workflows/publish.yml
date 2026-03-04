@@ -13,14 +13,18 @@ jobs:
     # Setup .npmrc file to publish to npm
     - name: Setup Node JS environment for npm
       uses: actions/setup-node@v6
+      with:
+        registry-url: 'https://registry.npmjs.org/'
+        scope: '@revolist'
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - run: npm i
     # Build
     - run: npm run build
     # Publish to npm
     - run: npm publish
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
     # Setup .npmrc file to publish to GitHub Packages
     - uses: actions/setup-node@v6
       with:
