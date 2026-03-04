@@ -11,10 +11,9 @@ jobs:
     # Setup .npmrc file to publish to npm
     - name: Setup Node JS environment for npm
       uses: actions/setup-node@v6
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       with:
         node-version: 24
+        token: ${{ secrets.NPM_TOKEN }}
         registry-url: 'https://registry.npmjs.org'
 
     - run: npm ci
