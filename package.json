@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/revolist/revogrid-column-numeral#readme",
   "devDependencies": {
-    "@revolist/revogrid": "^4.19.4",
+    "@revolist/revogrid": "^4.21.0",
     "@types/numeral": "^2.0.5",
     "ts-loader": "^9.5.1",
     "typescript": "^5.5.3",
