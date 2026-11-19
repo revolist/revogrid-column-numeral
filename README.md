@@ -89,13 +89,45 @@ grid.columns = columns;
 
 
 
+## Thousands and decimal separators
+
+With the default English locale, the `0,0.0` mask displays the number
+`100000` as `100,000.0`. Typing `100 000` into a numeral cell and pressing
+Enter saves the number `100000`. When setting the grid's source directly, use
+`{ amount: 100000 }`. The cell renderer reads numeric source values and
+numeric strings without grouping separators.
+
+To display a space for grouping and a comma for decimals, register and select a
+locale on the package's Numeral instance before mounting the grid:
+
+```js
+import NumberColumnType from '@revolist/revogrid-column-numeral';
+
+const numeral = NumberColumnType.getNumeralInstance();
+numeral.register('locale', 'app-space-comma', {
+  ...numeral.localeData('en'),
+  delimiters: { thousands: ' ', decimal: ',' },
+});
+numeral.locale('app-space-comma');
+
+const columnTypes = { numeric: new NumberColumnType('0,0.0') };
+const columns = [{ prop: 'amount', name: 'Amount', columnType: 'numeric' }];
+const source = [{ amount: 100000.5 }]; // Displays as 100 000,5.
+```
+
+In Vue 3, pass these as `:column-types="columnTypes"`, `:columns="columns"`,
+and `:source="source"` on `VGrid`. Register the locale once at app startup.
+The selected locale applies to all columns sharing the Numeral instance,
+including their editor input. Keep the mask syntax as `0,0.0` when changing
+the locale.
+
 ## Advanced
 
 If you need to get numeric library instance you can do this as simple as:
 
 ```js
 import NumberColumnType from '@revolist/revogrid-column-numeral';
-const numeral = NumberColumnType.getNumeralInstance;
+const numeral = NumberColumnType.getNumeralInstance();
 
 numeral.register('format', 'percentage', {});
 ```

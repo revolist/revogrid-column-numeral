@@ -14,10 +14,35 @@ const defaultFormat = '0,0[.]00';
  * Editor which returns value as number
  */
 class EditCell extends TextEditor {
-  getValue(): any {
+  private initialDraft?: { text: string; value: number };
+
+  override componentDidRender(): Promise<void> {
+    const input = this.editInput;
+    const value = this.editCell?.val;
+    if (
+      !this.initialDraft &&
+      input &&
+      typeof value === 'number' &&
+      Number.isFinite(value) &&
+      input.value === String(value)
+    ) {
+      // Match the parser's decimal separator without applying the display mask.
+      const text = input.value.replace('.', numeral.localeData().delimiters.decimal);
+      this.initialDraft = { text, value };
+      if (text !== input.value) {
+        input.value = text;
+      }
+    }
+    return super.componentDidRender();
+  }
+
+  override getValue(): any {
     const value = this.editInput?.value ?? '';
     if (!value.trim()) {
       return value;
+    }
+    if (this.initialDraft?.text === value) {
+      return this.initialDraft.value;
     }
     const numeric = numeral(value).value();
     if (numeric === null || Number.isNaN(numeric)) {
