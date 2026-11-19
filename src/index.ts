@@ -17,23 +17,28 @@ class EditCell extends TextEditor {
   private initialDraft?: { text: string; value: number };
 
   override componentDidRender(): Promise<void> {
+    this.initializeDraft();
+    return super.componentDidRender();
+  }
+
+  private initializeDraft(): void {
     const input = this.editInput;
     const value = this.editCell?.val;
-    if (
-      !this.initialDraft &&
-      input &&
-      typeof value === 'number' &&
-      Number.isFinite(value) &&
-      input.value === String(value)
-    ) {
-      // Match the parser's decimal separator without applying the display mask.
-      const text = input.value.replace('.', numeral.localeData().delimiters.decimal);
-      this.initialDraft = { text, value };
-      if (text !== input.value) {
-        input.value = text;
-      }
+    if (this.initialDraft || !input || typeof value !== 'number' || !Number.isFinite(value)) {
+      return;
     }
-    return super.componentDidRender();
+
+    const rawValue = input.value;
+    if (rawValue !== String(value)) {
+      return;
+    }
+
+    // Match the parser's decimal separator without applying the display mask.
+    const text = rawValue.replace('.', numeral.localeData().delimiters.decimal);
+    this.initialDraft = { text, value };
+    if (text !== rawValue) {
+      input.value = text;
+    }
   }
 
   override getValue(): any {
