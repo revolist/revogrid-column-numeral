@@ -1,0 +1,48 @@
+name: Release SBOMs
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag
+        required: true
+        type: string
+
+concurrency: release-sbom-${{ github.event.release.tag_name || inputs.release_tag }}
+
+permissions:
+  contents: write
+
+jobs:
+  sboms:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: refs/tags/${{ env.RELEASE_TAG }}
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - run: npm ci --ignore-scripts
+      - uses: anchore/sbom-action/download-syft@v0
+      - name: Generate SPDX and CycloneDX SBOMs
+        run: |
+          syft scan dir:. \
+            -o "spdx-json=$RUNNER_TEMP/sbom.spdx.json" \
+            -o "cyclonedx-json=$RUNNER_TEMP/sbom.cdx.json"
+      - name: Attach SBOMs to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          assets=$(gh release view --repo "$GITHUB_REPOSITORY" --json assets \
+            --jq '.assets[].name' -- "$RELEASE_TAG")
+          for asset in sbom.spdx.json sbom.cdx.json; do
+            if ! grep -Fxq -- "$asset" <<< "$assets"; then
+              gh release upload --repo "$GITHUB_REPOSITORY" -- "$RELEASE_TAG" "$RUNNER_TEMP/$asset"
+            fi
+          done
